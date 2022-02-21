@@ -1,16 +1,25 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, Types } = require('mongoose');
 const moment = require("moment");
 
 const ReactionSchema = new Schema (
     {
         reactionId: {
             type: Schema.Type.ObjectId,
-            default: 
+            default: () => new Types.ObjectId()
         },
         reactionBody: {
             type: String,
             required: true,
             validate: [({ length }) => length <= 280, "Max characters allowed is 280!"]
+        },
+        username: {
+            type: String,
+            required: 'Username is required!'
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now,
+            get: moment().format('LLLL')
         }
     }
 )
