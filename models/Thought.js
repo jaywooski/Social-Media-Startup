@@ -1,6 +1,19 @@
 const { Schema, model } = require('mongoose');
 const moment = require("moment");
 
+const ReactionSchema = new Schema (
+    {
+        reactionId: {
+            type: Schema.Type.ObjectId,
+            default: 
+        },
+        reactionBody: {
+            type: String,
+            required: true,
+            validate: [({ length }) => length <= 280, "Max characters allowed is 280!"]
+        }
+    }
+)
 
 const ThoughtSchema = new Schema (
     {
@@ -11,22 +24,22 @@ const ThoughtSchema = new Schema (
         },
         createdAt: {
             type: Date,
-            default: moment().format(),
-            get: moment().format('lll')
+            default: Date.now,
+            get: moment().format('LLLL')
             
         },
         username: {
             type: String,
             required: 'Username is required!'
         },
-        reactions: [reactionSchema]
+        reactions: [ReactionSchema]
     },
     {
         toJSON: {
-            getters: true,
             virtuals: true,
-            id: false
-        }
+            getters: true,
+        },
+        id: false
     }
 )
 
