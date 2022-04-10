@@ -52,7 +52,7 @@ const userController = {
 
     // Put to update a user by its _id
     updateUser({ params, body }, res){
-        User.findOneAndUpdate({ id: params.id }, body, { new: true, runValidators: true })
+        User.findOneAndUpdate({_id: params.id }, body, { new: true, runValidators: true })
         .then(dbUserData => {
             if(!dbUserData) {
                 return res.status(404).json({ message: 'No User with this ID found! :(' })
@@ -63,18 +63,19 @@ const userController = {
     },
 
     // Delete to remove a user by its _id
-    deleteUser({ params, body }, res){
-        User.findOneAndDelete({ id: params.id}, body, { new: true })
+    deleteUser({ params }, res){
+        User.findOneAndDelete({ _id: params.id})
         .then(dbUserData => {
             // Remove a user's thoughts when deleted
             
             if(!dbUserData){
                 return res.status(404).json({ message: 'No user with this ID' });
             }
-            res.json(dbUserData)
+            
         })
         .then((dbUserData) => {
-            Thought.deleteMany({username: dbUserData.username})
+            Thought.deleteMany({username: dbUserData.username});
+            res.json(dbUserData)
         })
         .catch((err) => res.json(err))
     },
