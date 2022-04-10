@@ -69,11 +69,11 @@ const userController = {
             // Remove a user's thoughts when deleted
             
             if(!dbUserData){
-                res.status(404).json({ message: 'No user with this ID' })
-                return;
+                return res.status(404).json({ message: 'No user with this ID' });
             }
+            res.json(dbUserData)
         })
-        .then(() => {
+        .then((dbUserData) => {
             Thought.deleteMany({username: dbUserData.username})
         })
         .catch((err) => res.json(err))
